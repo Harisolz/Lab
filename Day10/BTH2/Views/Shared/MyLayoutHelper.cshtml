@@ -1,0 +1,63 @@
+﻿
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"] | EduPanel</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+    <div class="dashboard-shell">
+
+        <!-- Sidebar sử dụng ViewComponent -->
+        <aside class="dashboard-sidebar" id="sidebar">
+            @await Component.InvokeAsync("Render")
+        </aside>
+
+        <div class="dashboard-workspace">
+
+            <!-- Top navigation Partial View -->
+            <partial name="TopNav" />
+
+            <!-- Nội dung trang -->
+            <main class="dashboard-content">
+                @RenderBody()
+            </main>
+
+            <!-- Footer Partial View -->
+            <partial name="Footer" />
+        </div>
+    </div>
+
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+            const sidebar = document.getElementById("sidebar");
+            const backdrop = document.getElementById("sidebarBackdrop");
+
+            function toggleSidebar() {
+                sidebar.classList.toggle("sidebar-open");
+                backdrop.classList.toggle("show");
+            }
+
+            backdrop.addEventListener("click", toggleSidebar);
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

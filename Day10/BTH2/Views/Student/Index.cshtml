@@ -1,0 +1,251 @@
+﻿@model IEnumerable<BTH2.Models.Student>
+
+@{
+    ViewData["Title"] = "Quản lý sinh viên";
+    Layout = "~/Views/Shared/MyLayoutHelper.cshtml";
+
+    var students = Model.ToList();
+
+    int totalStudents = students.Count;
+    int regularStudents = students.Count(s => s.IsRegular);
+    int femaleStudents = students.Count(s => s.Gender == BTH2.Models.Gender.Female);
+    int totalBranches = students.Select(s => s.Branch).Distinct().Count();
+}
+
+<!-- Page heading -->
+<div class="page-heading">
+    <div>
+        <div class="page-eyebrow">
+            <i class="bi bi-circle-fill"></i>
+            STUDENT MANAGEMENT
+        </div>
+
+        <h1>Quản lý sinh viên</h1>
+        <p>Theo dõi và quản lý thông tin sinh viên trong hệ thống.</p>
+    </div>
+
+    <span class="page-tag">
+        <i class="bi bi-mortarboard"></i>
+        Academic Dashboard
+    </span>
+</div>
+
+<!-- Statistics -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-top">
+            <span>Tổng sinh viên</span>
+            <span class="stat-icon stat-blue">
+                <i class="bi bi-people-fill"></i>
+            </span>
+        </div>
+
+        <div class="stat-value">@totalStudents</div>
+        <div class="stat-description">Sinh viên trong hệ thống</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-top">
+            <span>Hệ chính quy</span>
+            <span class="stat-icon stat-green">
+                <i class="bi bi-patch-check-fill"></i>
+            </span>
+        </div>
+
+        <div class="stat-value">@regularStudents</div>
+        <div class="stat-description">Sinh viên chính quy</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-top">
+            <span>Ngành đào tạo</span>
+            <span class="stat-icon stat-purple">
+                <i class="bi bi-mortarboard-fill"></i>
+            </span>
+        </div>
+
+        <div class="stat-value">@totalBranches</div>
+        <div class="stat-description">Ngành có sinh viên</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-top">
+            <span>Sinh viên nữ</span>
+            <span class="stat-icon stat-orange">
+                <i class="bi bi-person-fill"></i>
+            </span>
+        </div>
+
+        <div class="stat-value">@femaleStudents</div>
+        <div class="stat-description">Sinh viên nữ trong danh sách</div>
+    </div>
+</div>
+
+<!-- Student table -->
+<div class="content-card">
+
+    <div class="content-card-header">
+        <div>
+            <h2>Danh sách sinh viên</h2>
+            <p>Thông tin sinh viên hiện có trong hệ thống</p>
+        </div>
+
+        <span class="record-count">
+            @totalStudents sinh viên
+        </span>
+    </div>
+
+    <div class="table-toolbar">
+
+        <div class="search-field">
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   id="studentSearch"
+                   placeholder="Tìm theo tên, mã hoặc email..." />
+        </div>
+
+        <select id="educationFilter" class="filter-select">
+            <option value="all">Tất cả hệ đào tạo</option>
+            <option value="regular">Chính quy</option>
+            <option value="nonregular">Phi chính quy</option>
+        </select>
+    </div>
+
+    <div class="table-responsive">
+        <table class="student-table" id="studentTable">
+
+            <thead>
+                <tr>
+                    <th>MÃ SV</th>
+                    <th>SINH VIÊN</th>
+                    <th>NGÀY SINH</th>
+                    <th>NGÀNH HỌC</th>
+                    <th>GIỚI TÍNH</th>
+                    <th>HỆ ĐÀO TẠO</th>
+                    <th>ĐỊA CHỈ</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var student in students)
+                {
+                    string branchName = student.Branch switch
+                    {
+                        BTH2.Models.Branch.IT => "Công nghệ thông tin",
+                        BTH2.Models.Branch.BE => "Kinh tế",
+                        BTH2.Models.Branch.CE => "Công trình",
+                        BTH2.Models.Branch.EE => "Điện - Điện tử",
+                        _ => "Chưa xác định"
+                    };
+
+                    string genderName =
+                        student.Gender == BTH2.Models.Gender.Male
+                            ? "Nam"
+                            : "Nữ";
+
+                    string initials = string.Join("",
+                        student.Name.Split(' ',
+                            StringSplitOptions.RemoveEmptyEntries)
+                            .TakeLast(2)
+                            .Select(word => char.ToUpperInvariant(word[0])));
+
+                    <tr data-education="@(student.IsRegular ? "regular" : "nonregular")">
+
+                        <td class="student-id">
+                            #@student.Id
+                        </td>
+
+                        <td>
+                            <div class="student-info">
+                                <div class="student-avatar-modern">
+                                    @initials
+                                </div>
+
+                                <div class="student-details">
+                                    <strong>@student.Name</strong>
+                                    <small>@student.Email</small>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            @student.DateOfBirth.ToString("dd/MM/yyyy")
+                        </td>
+
+                        <td>
+                            <span class="branch-label">
+                                @branchName
+                            </span>
+                        </td>
+
+                        <td>@genderName</td>
+
+                        <td>
+                            @if (student.IsRegular)
+                            {
+                                <span class="status-badge status-regular">
+                                    <span class="status-dot"></span>
+                                    Chính quy
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="status-badge status-nonregular">
+                                    <span class="status-dot"></span>
+                                    Phi chính quy
+                                </span>
+                            }
+                        </td>
+
+                        <td>@student.Address</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-bottom">
+        <span id="resultCount">Hiển thị @totalStudents sinh viên</span>
+        <span>Dữ liệu thực hành Lab 2</span>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const searchInput = document.getElementById("studentSearch");
+        const educationFilter = document.getElementById("educationFilter");
+        const rows = document.querySelectorAll("#studentTable tbody tr");
+        const resultCount = document.getElementById("resultCount");
+
+        function filterStudents() {
+            const keyword = searchInput.value.toLowerCase().trim();
+            const education = educationFilter.value;
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const rowEducation = row.dataset.education;
+
+                const matchesSearch = text.includes(keyword);
+                const matchesEducation =
+                    education === "all" || rowEducation === education;
+
+                const visible = matchesSearch && matchesEducation;
+
+                row.style.display = visible ? "" : "none";
+
+                if (visible) {
+                    visibleCount++;
+                }
+            });
+
+            resultCount.textContent =
+                `Hiển thị ${visibleCount} sinh viên`;
+        }
+
+        searchInput.addEventListener("input", filterStudents);
+        educationFilter.addEventListener("change", filterStudents);
+    </script>
+}

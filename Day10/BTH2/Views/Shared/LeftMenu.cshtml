@@ -1,0 +1,65 @@
+﻿
+<div class="sidebar-inner">
+
+    <a asp-controller="Student"
+       asp-action="Index"
+       class="sidebar-brand">
+
+        <span class="brand-icon">
+            <i class="bi bi-mortarboard-fill"></i>
+        </span>
+
+        <span>
+            <strong>EduPanel</strong>
+            <small>Student Management</small>
+        </span>
+    </a>
+
+    <div class="sidebar-section-label">WORKSPACE</div>
+
+    <nav class="sidebar-navigation">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="sidebar-nav-item">
+            <i class="bi bi-grid-1x2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a asp-controller="Student"
+           asp-action="Index"
+           class="sidebar-nav-item active">
+            <i class="bi bi-people"></i>
+            <span>Sinh viên</span>
+        </a>
+
+        <a href="#"
+           class="sidebar-nav-item">
+            <i class="bi bi-building"></i>
+            <span>Ngành học</span>
+        </a>
+
+        <a href="#"
+           class="sidebar-nav-item">
+            <i class="bi bi-journal-bookmark"></i>
+            <span>Môn học</span>
+        </a>
+
+        <a href="#"
+           class="sidebar-nav-item">
+            <i class="bi bi-book"></i>
+            <span>Khóa học</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <div class="sidebar-profile">
+            <div class="profile-avatar">AD</div>
+            <div>
+                <strong>Administrator</strong>
+                <small>Quản trị viên</small>
+            </div>
+            <i class="bi bi-three-dots"></i>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+﻿
+<header class="topbar">
+
+    <div class="topbar-left">
+        <button type="button"
+                class="mobile-menu-btn"
+                onclick="toggleSidebar()"
+                aria-label="Mở menu">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <div class="topbar-breadcrumb">
+            <span>Workspace</span>
+            <i class="bi bi-chevron-right"></i>
+            <strong>@ViewData["Title"]</strong>
+        </div>
+    </div>
+
+    <div class="topbar-right">
+
+        <span class="topbar-date">
+            <i class="bi bi-calendar3"></i>
+            @DateTime.Now.ToString("dd/MM/yyyy")
+        </span>
+
+        <div class="topbar-avatar" title="Administrator">
+            AD
+        </div>
+    </div>
+</header>
