@@ -1,0 +1,50 @@
+﻿@model BTH4.Models.Learner
+
+@{
+    ViewData["Title"] = "Xóa người học";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="text-danger mb-3">
+                Xác nhận xóa người học
+            </h3>
+
+            <p>Bạn có chắc muốn xóa người học này?</p>
+
+            <dl class="row">
+                <dt class="col-sm-4">Họ tên</dt>
+                <dd class="col-sm-8">
+                    @Model.LastName @Model.FirstMidName
+                </dd>
+
+                <dt class="col-sm-4">Ngày nhập học</dt>
+                <dd class="col-sm-8">
+                    @Model.EnrollmentDate.ToString("dd/MM/yyyy")
+                </dd>
+
+                <dt class="col-sm-4">Ngành học</dt>
+                <dd class="col-sm-8">
+                    @Model.Major?.MajorName
+                </dd>
+            </dl>
+
+            <form asp-action="Delete"
+                  asp-route-id="@Model.LearnerID"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <button type="submit" class="btn btn-danger">
+                    Xác nhận xóa
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Hủy
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
