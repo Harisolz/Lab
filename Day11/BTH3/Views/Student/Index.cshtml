@@ -1,0 +1,144 @@
+﻿@model IEnumerable<BTH3.Models.Student>
+
+@{
+    ViewData["Title"] = "Danh sách sinh viên";
+}
+
+<h2 class="mb-4">DANH SÁCH SINH VIÊN</h2>
+
+<!-- Cách 1: HTML thuần -->
+<a href="/Admin/Student/Add"
+   class="btn btn-primary mb-3">
+    Create Student - HTML
+</a>
+
+<!-- Cách 2: Tag Helper asp-action -->
+<a asp-controller="Student"
+   asp-action="Create"
+   class="btn btn-outline-primary mb-3">
+    Create Student - asp-action
+</a>
+
+<!-- Cách 3: Tag Helper asp-route -->
+<a asp-route="student-add"
+   class="btn btn-outline-success mb-3">
+    Create Student - asp-route
+</a>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Ảnh đại diện</th>
+                <th>Họ tên</th>
+                <th>Ngày sinh</th>
+                <th>Ngành học</th>
+                <th>Giới tính</th>
+                <th>Hệ đào tạo</th>
+                <th>Địa chỉ</th>
+                <th>Email</th>
+                <th>Điểm</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <!-- ID -->
+                    <td>@student.Id</td>
+
+                    <!-- Ảnh đại diện -->
+                    <td>
+                        @if (!string.IsNullOrEmpty(student.ImagePath))
+                        {
+                            <img src="@student.ImagePath"
+                                 alt="Ảnh của sinh viên"
+                                 class="student-avatar"
+                                 width="80"
+                                 height="80"
+                                 style="object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                Chưa có ảnh
+                            </span>
+                        }
+                    </td>
+
+                    <!-- Họ tên -->
+                    <td>@student.Name</td>
+
+                    <!-- Ngày sinh -->
+                    <td>
+                        @student.DateOfBirth?.ToString("dd/MM/yyyy")
+                    </td>
+
+                    <!-- Ngành học -->
+                    <td>
+                        @{
+                            string branchName = student.Branch switch
+                            {
+                                BTH3.Models.Branch.IT => "CNTT",
+                                BTH3.Models.Branch.BE => "Kinh tế",
+                                BTH3.Models.Branch.CE => "Công trình",
+                                BTH3.Models.Branch.EE => "Điện, điện tử",
+                                _ => "Chưa chọn"
+                            };
+                        }
+
+                        @branchName
+                    </td>
+
+                    <!-- Giới tính -->
+                    <td>
+                        @if (student.Gender == BTH3.Models.Gender.Male)
+                        {
+                            <span>Nam</span>
+                        }
+                        else if (student.Gender == BTH3.Models.Gender.Female)
+                        {
+                            <span>Nữ</span>
+                        }
+                        else
+                        {
+                            <span>Chưa chọn</span>
+                        }
+                    </td>
+
+                    <!-- Hệ đào tạo -->
+                    <td>
+                        @(student.IsRegular
+                            ? "Chính quy"
+                            : "Phi chính quy")
+                    </td>
+
+                    <!-- Địa chỉ -->
+                    <td>@student.Address</td>
+
+                    <!-- Email -->
+                    <td>@student.Email</td>
+
+                    <!-- Điểm -->
+                    <td>
+                        @if (student.Score.HasValue)
+                        {
+                            <span class="fw-bold">
+                                @student.Score.Value.ToString("0.0")
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                Chưa có điểm
+                            </span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
