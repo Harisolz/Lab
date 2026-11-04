@@ -1,0 +1,32 @@
+﻿@model IEnumerable<BTH5.Models.Major>
+
+@{
+    int? selectedMajorId = ViewBag.SelectedMajorId;
+}
+
+<label for="majorId" class="form-label fw-semibold">
+    Chuyên ngành
+</label>
+
+<select id="majorId"
+        name="majorId"
+        class="form-select">
+
+    <option value="">Tất cả chuyên ngành</option>
+
+    @foreach (var major in Model)
+    {
+        if (selectedMajorId == major.MajorID)
+        {
+            <option value="@major.MajorID" selected>
+                @major.MajorName
+            </option>
+        }
+        else
+        {
+            <option value="@major.MajorID">
+                @major.MajorName
+            </option>
+        }
+    }
+</select>

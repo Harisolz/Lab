@@ -1,0 +1,321 @@
+﻿@model IEnumerable<BTH5.Models.Learner>
+
+@{
+    ViewData["Title"] = "Danh sách người học";
+
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 0;
+    int totalItems = ViewBag.TotalItems ?? 0;
+    int pageSize = ViewBag.PageSize ?? 5;
+
+    string searchString = ViewBag.SearchString ?? "";
+    int? majorId = ViewBag.MajorId;
+}
+
+<div class="container-fluid py-4">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="d-flex justify-content-between
+        align-items-center flex-wrap gap-3 mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                Danh sách người học
+            </h2>
+
+            <p class="text-muted mb-0">
+                Quản lý thông tin người học
+            </p>
+        </div>
+
+        <a asp-controller="Learner"
+           asp-action="Create"
+           class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i>
+            Thêm người học
+        </a>
+    </div>
+
+    <!-- THÔNG BÁO -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <!-- THANH TÌM KIẾM VÀ LỌC -->
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <form asp-controller="Learner"
+                  asp-action="Index"
+                  method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- TÌM KIẾM -->
+                    <div class="col-lg-5 col-md-6">
+
+                        <label for="searchString"
+                               class="form-label fw-semibold">
+                            Tìm kiếm
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-search"></i>
+                            </span>
+
+                            <input id="searchString"
+                                   type="search"
+                                   name="searchString"
+                                   value="@searchString"
+                                   class="form-control"
+                                   placeholder="Nhập họ hoặc tên người học..." />
+
+                        </div>
+                    </div>
+
+                    <!-- LỌC CHUYÊN NGÀNH -->
+                    <div class="col-lg-4 col-md-6">
+                        @await Component.InvokeAsync("Major")
+                    </div>
+
+                    <!-- NÚT -->
+                    <div class="col-lg-3 col-md-12">
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary flex-fill">
+                                <i class="bi bi-search me-1"></i>
+                                Tìm kiếm
+                            </button>
+
+                            <a asp-controller="Learner"
+                               asp-action="Index"
+                               class="btn btn-outline-secondary flex-fill">
+                                <i class="bi bi-arrow-clockwise me-1"></i>
+                                Đặt lại
+                            </a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- DANH SÁCH -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3
+            d-flex justify-content-between
+            align-items-center">
+
+            <h5 class="fw-semibold mb-0">
+                Danh sách người học
+            </h5>
+
+            <span class="badge bg-primary">
+                @totalItems người học
+            </span>
+        </div>
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-striped
+                    table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Mã</th>
+                            <th>Tên</th>
+                            <th>Học</th>
+                            <th>Ngành</th>
+                            <th class="text-center">Chức năng</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model.Any())
+                        {
+                            foreach (var learner in Model)
+                            {
+                                <tr>
+
+                                    <!-- MÃ THỰC TẾ -->
+                                    <td class="ps-4 fw-semibold">
+                                        @learner.LearnerID
+                                    </td>
+
+                                    <!-- TÊN -->
+                                    <td>
+                                        @learner.LastName
+                                        @learner.FirstMidName
+                                    </td>
+
+                                    <!-- NGÀY NHẬP HỌC -->
+                                    <td>
+                                        @learner.EnrollmentDate
+                                        .ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <!-- NGÀNH -->
+                                    <td>
+                                        <span class="badge bg-info text-dark">
+                                            @(learner.Major?.MajorName
+                                                ?? "Chưa có ngành")
+                                        </span>
+                                    </td>
+
+                                    <!-- CHỨC NĂNG -->
+                                    <td class="text-center">
+
+                                        <div class="d-flex justify-content-center
+                                            gap-2">
+
+                                            <a asp-controller="Learner"
+                                               asp-action="Edit"
+                                               asp-route-id="@learner.LearnerID"
+                                               class="btn btn-outline-warning btn-sm">
+
+                                                <i class="bi bi-pencil-square"></i>
+                                                Sửa
+                                            </a>
+
+                                            <a asp-controller="Learner"
+                                               asp-action="Delete"
+                                               asp-route-id="@learner.LearnerID"
+                                               class="btn btn-outline-danger btn-sm">
+
+                                                <i class="bi bi-trash"></i>
+                                                Xóa
+                                            </a>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5"
+                                    class="text-center py-5 text-muted">
+
+                                    <i class="bi bi-search fs-2
+                                    d-block mb-2"></i>
+
+                                    Không tìm thấy người học phù hợp.
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PHÂN TRANG -->
+        <div class="card-footer bg-white py-3">
+
+            <div class="d-flex flex-wrap justify-content-between
+                align-items-center gap-3">
+
+                <div class="text-muted small">
+
+                    @if (totalItems > 0)
+                    {
+                        int start = (currentPage - 1)
+                            * pageSize + 1;
+
+                        int end = Math.Min(
+                            currentPage * pageSize,
+                            totalItems);
+
+                        <span>
+                            Hiển thị @start - @end
+                            trong @totalItems người học
+                        </span>
+                    }
+                    else
+                    {
+                        <span>Không có dữ liệu</span>
+                    }
+
+                </div>
+
+                @if (totalPages > 1)
+                {
+                    <nav aria-label="Điều hướng phân trang">
+
+                        <ul class="pagination pagination-sm mb-0">
+
+                            <!-- TRANG TRƯỚC -->
+                            <li class="page-item
+                                @(currentPage == 1 ? "disabled" : "")">
+
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@(currentPage - 1)"
+                                   asp-route-searchString="@searchString"
+                                   asp-route-majorId="@majorId">
+                                    Trước
+                                </a>
+                            </li>
+
+                            <!-- SỐ TRANG -->
+                            @for (int i = 1; i <= totalPages; i++)
+                            {
+                                <li class="page-item
+                                    @(i == currentPage ? "active" : "")">
+
+                                    <a class="page-link"
+                                       asp-action="Index"
+                                       asp-route-page="@i"
+                                       asp-route-searchString="@searchString"
+                                       asp-route-majorId="@majorId">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- TRANG SAU -->
+                            <li class="page-item
+                                @(currentPage == totalPages ? "disabled" : "")">
+
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@(currentPage + 1)"
+                                   asp-route-searchString="@searchString"
+                                   asp-route-majorId="@majorId">
+                                    Sau
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                }
+
+            </div>
+        </div>
+
+    </div>
+</div>
