@@ -1,0 +1,26 @@
+﻿<!-- Begin Main Content -->
+<main class="main">
+    <div class="container">
+        <div class="banner"><img src="~/images/banner.jpg" alt="Banner" /></div>
+
+        <!-- Sách mới -->
+        <div class="section-head">
+            <h3>Danh sach sach co gia tu 100 tro len</h3>
+            <a href="#">Xem tất cả &rsaquo;</a>
+        </div>
+        <div class="grid">
+                foreach (Sach item in ViewBag.DanhSachSach)
+            
+            {
+                <div class="book-card">
+                <img src="@Url.Content("~/images/"+s.Anh)" alt="@s.TenSach" />
+                <h2>@s.TenSach</h2>
+                "
+                <div class="book-foot">
+                    <span class="price">@s.Gia></span>
+                    <button class="btn-buy">Them vao gio </button>
+            </div>
+            
+    </div>
+            }
+</div>
