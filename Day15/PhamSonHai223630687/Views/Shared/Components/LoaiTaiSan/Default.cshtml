@@ -1,0 +1,12 @@
+﻿@model IEnumerable<PhamSonHai223630687.Models.LoaiTaiSan>
+
+<li class="active">
+    <a href="/">Phạm Sơn Hải</a>
+</li>
+
+@foreach (var item in Model)
+{
+    <li>
+        <a href="#">@item.TenLoai</a>
+    </li>
+}
