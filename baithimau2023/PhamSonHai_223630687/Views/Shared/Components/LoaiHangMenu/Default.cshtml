@@ -1,0 +1,13 @@
+﻿@model IEnumerable<LoaiHang>
+<ul>
+    <li class="active">
+        <a href="@Url.Action("Index","Home")">Pham Son Hai</a>
+    </li>
+    @foreach (var loai in Model){
+        <li>
+            <a href="#" class="menu-loai"
+            data-url="@Url.Action("TheoLoai","HangHoa",new { id = loai.MaLoai })">@loai.TenLoai</a>
+        </li>
+    }
+    <div class="clear"></div>
+</ul>
